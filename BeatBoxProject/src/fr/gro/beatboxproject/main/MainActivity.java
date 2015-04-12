@@ -15,88 +15,104 @@ import fr.gro.beatboxproject.business.Player;
 import fr.gro.beatboxproject.business.Recorder;
 import fr.gro.beatboxproject.objects.StateEnum;
 
+import static android.graphics.Color.RED;
+import static android.graphics.Color.WHITE;
+
 public class MainActivity extends Activity implements OnClickListener,
 		OnLongClickListener {
+
+	public static final String SOUND_BUTTON_1 = "SOUND_button1";
+	public static final String SOUND_BUTTON_2 = "SOUND_button2";
+	public static final String SOUND_BUTTON_3 = "SOUND_button3";
+	public static final String SOUND_BUTTON_4 = "SOUND_button4";
+	public static final String YOUR_SOUND = "FINAL_SOUND";
 
 	/**
 	 * Button 1
 	 */
 	Recorder r1 = null;
 	Player p1 = null;
-	StateEnum stateB1 = null;
+	StateEnum stateB1 = StateEnum.RECORD;
+	Button b1 = null;
 
 	/**
 	 * Button 2
 	 */
 	Recorder r2 = null;
 	Player p2 = null;
-	StateEnum stateB2 = null;
+	StateEnum stateB2 = StateEnum.RECORD;
+	Button b2 = null;
 
 	/**
 	 * Button 3
 	 */
 	Recorder r3 = null;
 	Player p3 = null;
-	StateEnum stateB3 = null;
+	StateEnum stateB3 = StateEnum.RECORD;
+	Button b3 = null;
 
 	/**
 	 * Button 4
 	 */
 	Recorder r4 = null;
 	Player p4 = null;
-	StateEnum stateB4 = null;
+	StateEnum stateB4 = StateEnum.RECORD;
+	Button b4 = null;
 
 	/**
 	 * Button rec
 	 */
 	Recorder rec = null;
 	Player lec = null;
-	StateEnum stateRecLec = null;
+	StateEnum stateRecLec = StateEnum.RECORD;
+	Button recLec = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Button b1 = (Button) findViewById(R.id.button1);
+		b1 = (Button) findViewById(R.id.button1);
+		b2 = (Button) findViewById(R.id.button2);
+		b3 = (Button) findViewById(R.id.button3);
+		b4 = (Button) findViewById(R.id.button4);
+		recLec = (Button) findViewById(R.id.buttonRec);
+
+		initListener();
+
+		r1 = new Recorder(null, SOUND_BUTTON_1);
+		r2 = new Recorder(null, SOUND_BUTTON_2);
+		r3 = new Recorder(null, SOUND_BUTTON_3);
+		r4 = new Recorder(null, SOUND_BUTTON_4);
+		/*use of current date*/
+		rec = new Recorder(null, YOUR_SOUND);
+
+		p1 = new Player(null, r1.getFilenameRecord());
+		p2 = new Player(null, r2.getFilenameRecord());
+		p3 = new Player(null, r3.getFilenameRecord());
+		p4 = new Player(null, r4.getFilenameRecord());
+		lec = new Player(null, rec.getFilenameRecord());
+
+	}
+
+	/**
+	 * Init listener
+	 */
+	private void initListener() {
 		b1.setOnClickListener(this);
 		b1.setOnLongClickListener(this);
 
-		Button b2 = (Button) findViewById(R.id.button2);
 		b2.setOnClickListener(this);
 		b2.setOnLongClickListener(this);
 
-		Button b3 = (Button) findViewById(R.id.button3);
 		b3.setOnClickListener(this);
 		b3.setOnLongClickListener(this);
 
-		Button b4 = (Button) findViewById(R.id.button4);
 		b4.setOnClickListener(this);
 		b4.setOnLongClickListener(this);
 
-		Button recLec = (Button) findViewById(R.id.buttonRec);
 		recLec.setOnClickListener(this);
 		recLec.setOnLongClickListener(this);
-
-		r1 = new Recorder(null, "button1");
-		p1 = new Player(null, r1.getFilenameRecord());
-		stateB1 = StateEnum.RECORD;
-
-		r2 = new Recorder(null, "button2");
-		p2 = new Player(null, r2.getFilenameRecord());
-		stateB2 = StateEnum.RECORD;
-
-		r3 = new Recorder(null, "button3");
-		p3 = new Player(null, r3.getFilenameRecord());
-		stateB3 = StateEnum.RECORD;
-
-		r4 = new Recorder(null, "button4");
-		p4 = new Player(null, r4.getFilenameRecord());
-		stateB4 = StateEnum.RECORD;
-
-		rec = new Recorder(null, "YourSound");
-		lec = new Player(null, rec.getFilenameRecord());
-		stateRecLec = StateEnum.RECORD;
 	}
 
 	@Override
@@ -111,19 +127,19 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		switch (arg0.getId()) {
 		case R.id.button1:
-			stateB1 = nextStep(r1, p1, stateB1);
+			stateB1 = nextStep(r1, p1, stateB1, b1);
 			break;
 		case R.id.button2:
-			stateB2 = nextStep(r2, p2, stateB2);
+			stateB2 = nextStep(r2, p2, stateB2, b2);
 			break;
 		case R.id.button3:
-			stateB3 = nextStep(r3, p3, stateB3);
+			stateB3 = nextStep(r3, p3, stateB3, b3);
 			break;
 		case R.id.button4:
-			stateB4 = nextStep(r4, p4, stateB4);
+			stateB4 = nextStep(r4, p4, stateB4, b4);
 			break;
 		case R.id.buttonRec:
-			stateRecLec = nextStep(rec, lec, stateRecLec);
+			stateRecLec = nextStep(rec, lec, stateRecLec, recLec);
 			break;
 		default:
 			break;
@@ -137,24 +153,29 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		switch (arg0.getId()) {
 		case R.id.button1:
-			Toast.makeText(this, "reset btt 1", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this,R.string.reset, Toast.LENGTH_SHORT).show();
 			stateB1 = StateEnum.RECORD;
+			b1.setText(R.string.readyRecord);
 			break;
 		case R.id.button2:
-			Toast.makeText(this, "reset btt 2", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.reset, Toast.LENGTH_SHORT).show();
 			stateB2 = StateEnum.RECORD;
+			b2.setText(R.string.readyRecord);
 			break;
 		case R.id.button3:
-			Toast.makeText(this, "reset btt 3", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.reset, Toast.LENGTH_SHORT).show();
 			stateB3 = StateEnum.RECORD;
+			b3.setText(R.string.readyRecord);
 			break;
 		case R.id.button4:
-			Toast.makeText(this, "reset btt 4", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.reset, Toast.LENGTH_SHORT).show();
 			stateB4 = StateEnum.RECORD;
+			b4.setText(R.string.readyRecord);
 			break;
 		case R.id.buttonRec:
-			Toast.makeText(this, "reset btt rec", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.reset, Toast.LENGTH_SHORT).show();
 			stateRecLec = StateEnum.RECORD;
+			recLec.setText(R.string.readyRecord);
 			break;
 		default:
 			break;
@@ -163,27 +184,49 @@ public class MainActivity extends Activity implements OnClickListener,
 		return true;
 	}
 
-	private StateEnum nextStep(Recorder record, Player pla, StateEnum currState) {
+	/**
+	 * Evaluate the next step of the button
+	 * !isRecording ? recording : stop recording
+	 * !isPlaying ? playing : stop playing
+	 *
+	 * Change the appearance of the button :
+	 * text color to RED if button is use, white if
+	 *
+	 * @param recorder : current recorder
+	 * @param player : current player
+	 * @param currState : current state
+	 * @param button : current button
+	 * @return new current state
+	 */
+	private StateEnum nextStep(Recorder recorder, Player player, StateEnum currState, Button button) {
 
 		switch (currState) {
 		case RECORD:
-			if (!record.isRecording()) {
-				Toast.makeText(this, "start record", Toast.LENGTH_SHORT).show();
-				record.start();
+			if (!recorder.isRecording()) {
+				Toast.makeText(this, R.string.startRecording, Toast.LENGTH_SHORT).show();
+				recorder.start();
+				button.setText(R.string.recording);
+				changeStyleToButtonUsed(button);
 			} else {
-				Toast.makeText(this, "stop record", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.stopRecording, Toast.LENGTH_SHORT).show();
 				currState = StateEnum.PLAY;
-				record.stop();
+				recorder.stop();
+				button.setText(R.string.readyPlay);
+				changeStyleToButtonNotUsed(button);
 			}
 			break;
 		case PLAY:
-			if (!pla.isStarted()) {
-				Toast.makeText(this, "start playing", Toast.LENGTH_SHORT)
+			if (!player.isStarted()) {
+				Toast.makeText(this, R.string.startPlaying, Toast.LENGTH_SHORT)
 						.show();
-				pla.start();
+				player.start();
+				button.setText(R.string.playing);
+				changeStyleToButtonUsed(button);
 			} else {
-				Toast.makeText(this, "stop playing", Toast.LENGTH_SHORT).show();
-				pla.stop();
+				Toast.makeText(this, R.string.stopPlaying, Toast.LENGTH_SHORT).show();
+				player.stop();
+				button.setText(R.string.readyPlay);
+				changeStyleToButtonNotUsed(button);
 			}
 			break;
 		default:
@@ -191,6 +234,22 @@ public class MainActivity extends Activity implements OnClickListener,
 		}
 
 		return currState;
+	}
+
+	/**
+	 * Change button textColor to RED
+ 	 * @param button
+	 */
+	private void changeStyleToButtonUsed(Button button) {
+		button.setTextColor(RED);
+	}
+
+	/**
+	 * Change button textColor to WHITE
+	 * @param button
+	 */
+	private void changeStyleToButtonNotUsed(Button button) {
+		button.setTextColor(WHITE);
 	}
 
 
