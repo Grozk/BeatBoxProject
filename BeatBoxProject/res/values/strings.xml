@@ -12,5 +12,10 @@
     <string name="stopRecording">Stop recording</string>
     <string name="reset">Reset</string>
     <string name="recordYourSound">Record your sound</string>
+    <string name="failed">Failed</string>
+    <string name="success">Success</string>
+    <string name="questionSave">Would you like to save your sound ?</string>
+    <string name="oui">Yes</string>
+    <string name="non">No</string>
 
 </resources>

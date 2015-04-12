@@ -1,12 +1,15 @@
 package fr.gro.beatboxproject.main;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.beatboxproject.R;
@@ -67,6 +70,11 @@ public class MainActivity extends Activity implements OnClickListener,
 	StateEnum stateRecLec = StateEnum.RECORD;
 	Button recLec = null;
 
+	/**
+	 * Button save final sound
+	 */
+	ImageButton buttonSaveLoad = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,6 +85,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		b3 = (Button) findViewById(R.id.button3);
 		b4 = (Button) findViewById(R.id.button4);
 		recLec = (Button) findViewById(R.id.buttonRec);
+		buttonSaveLoad = (ImageButton) findViewById(R.id.buttonSaveLoad);
 
 		initListener();
 
@@ -113,6 +122,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		recLec.setOnClickListener(this);
 		recLec.setOnLongClickListener(this);
+
+		buttonSaveLoad.setOnClickListener(this);
 	}
 
 	@Override
@@ -141,6 +152,30 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.buttonRec:
 			stateRecLec = nextStep(rec, lec, stateRecLec, recLec);
 			break;
+			case R.id.buttonSaveLoad:
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.questionSave);
+				builder.setCancelable(false)
+					.setPositiveButton(R.string.oui,new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							if (!rec.copie()){
+								Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_SHORT).show();
+							}
+						}
+					})
+					.setNegativeButton(R.string.non, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					});
+				// create alert dialog
+				AlertDialog alertDialog = builder.create();
+
+				// show it
+				alertDialog.show();
+				break;
 		default:
 			break;
 

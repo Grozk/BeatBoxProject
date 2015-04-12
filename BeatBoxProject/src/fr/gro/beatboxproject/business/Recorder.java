@@ -1,7 +1,12 @@
 package fr.gro.beatboxproject.business;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -11,6 +16,7 @@ public class Recorder {
 	private static final String AUDIO_RECORDER_FILE_EXT_3GP = ".3gp";
 	private static final String AUDIO_RECORDER_FILE_EXT_MP4 = ".mp4";
 	private static final String AUDIO_RECORDER_FOLDER = "BeatBoxProject";
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy_HHmmss");
 
 	private int currentFormat = 0;
 	private int output_formats[] = { MediaRecorder.OutputFormat.MPEG_4,
@@ -28,7 +34,7 @@ public class Recorder {
 		super();
 		this.mRecorder = recorder;
 		this.idButton = idButton;
-		createFilename();
+		createFilename(null);
 	}
 	
 	private void startRecording() {
@@ -72,13 +78,18 @@ public class Recorder {
 		}
 	}
 
-	private String createFilename() {
-		// you can create a new file name "test.jpg" in sdcard folder.
+	private String createFilename(String date) {
+
 		File fParent = new File(Environment.getExternalStorageDirectory()
 				+ File.separator + AUDIO_RECORDER_FOLDER);
-		File fic = new File(Environment.getExternalStorageDirectory()
+		String nameFic = Environment.getExternalStorageDirectory()
 				+ File.separator + AUDIO_RECORDER_FOLDER + File.separator
-				+ idButton + file_exts[currentFormat]);
+				+ idButton;
+		if (date != null && date!=""){
+			nameFic = nameFic.concat("_" + date);
+		}
+		nameFic = nameFic.concat(file_exts[currentFormat]);
+		File fic = new File(nameFic);
 		if (!fParent.exists()) {
 			fParent.mkdir();
 		}
@@ -86,6 +97,37 @@ public class Recorder {
 		filename = fic.getAbsolutePath().toString();
 
 		return filename;
+	}
+
+	public boolean copie(){
+		boolean result;
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		try {
+			fis = new FileInputStream(filename);
+			Date currDate = new Date();
+
+			fos = new FileOutputStream(createFilename(DATE_FORMAT.format(currDate)));
+
+			byte buffer[]=new byte[512*1024];
+			int nbLecture;
+			while ((nbLecture = fis.read(buffer)) != -1){
+				fos.write(buffer,0,nbLecture);
+			}
+			result = true;
+		} catch(Exception e){
+			System.out.print(e);
+			result = false;
+		}finally {
+			try{
+				fis.close();
+				fos.close();
+			} catch(Exception e){
+				System.out.print(e);
+				result = false;
+			}
+		}
+		return result;
 	}
 
 	public void start() {

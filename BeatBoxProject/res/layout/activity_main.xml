@@ -21,7 +21,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/buttonshape"
+            android:background="@drawable/button_shape"
             style="@style/buttonStyle"
             android:text="@string/readyRecord" />
 
@@ -30,7 +30,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/buttonshape"
+            android:background="@drawable/button_shape"
             style="@style/buttonStyle"
             android:text="@string/readyRecord" />
     </LinearLayout>
@@ -46,7 +46,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/buttonshape"
+            android:background="@drawable/button_shape"
             style="@style/buttonStyle"
             android:text="@string/readyRecord" />
 
@@ -55,7 +55,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/buttonshape"
+            android:background="@drawable/button_shape"
             style="@style/buttonStyle"
             android:text="@string/readyRecord" />
     </LinearLayout>
@@ -70,10 +70,17 @@
             android:id="@+id/buttonRec"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/buttonshape"
+            android:layout_weight="3"
+            android:background="@drawable/button_shape"
             style="@style/buttonStyle"
             android:text="@string/recordYourSound" />
+
+       <ImageButton
+            android:id="@+id/buttonSaveLoad"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/image_save"/>
 
     </LinearLayout>
 
