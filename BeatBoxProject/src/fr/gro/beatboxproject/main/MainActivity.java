@@ -46,6 +46,13 @@ public class MainActivity extends Activity implements OnClickListener,
 	Player p4 = null;
 	StateEnum stateB4 = null;
 
+	/**
+	 * Button rec
+	 */
+	Recorder rec = null;
+	Player lec = null;
+	StateEnum stateRecLec = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,6 +74,10 @@ public class MainActivity extends Activity implements OnClickListener,
 		b4.setOnClickListener(this);
 		b4.setOnLongClickListener(this);
 
+		Button recLec = (Button) findViewById(R.id.buttonRec);
+		recLec.setOnClickListener(this);
+		recLec.setOnLongClickListener(this);
+
 		r1 = new Recorder(null, "button1");
 		p1 = new Player(null, r1.getFilenameRecord());
 		stateB1 = StateEnum.RECORD;
@@ -82,6 +93,10 @@ public class MainActivity extends Activity implements OnClickListener,
 		r4 = new Recorder(null, "button4");
 		p4 = new Player(null, r4.getFilenameRecord());
 		stateB4 = StateEnum.RECORD;
+
+		rec = new Recorder(null, "YourSound");
+		lec = new Player(null, rec.getFilenameRecord());
+		stateRecLec = StateEnum.RECORD;
 	}
 
 	@Override
@@ -106,6 +121,9 @@ public class MainActivity extends Activity implements OnClickListener,
 			break;
 		case R.id.button4:
 			stateB4 = nextStep(r4, p4, stateB4);
+			break;
+		case R.id.buttonRec:
+			stateRecLec = nextStep(rec, lec, stateRecLec);
 			break;
 		default:
 			break;
@@ -133,6 +151,10 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.button4:
 			Toast.makeText(this, "reset btt 4", Toast.LENGTH_SHORT).show();
 			stateB4 = StateEnum.RECORD;
+			break;
+		case R.id.buttonRec:
+			Toast.makeText(this, "reset btt rec", Toast.LENGTH_SHORT).show();
+			stateRecLec = StateEnum.RECORD;
 			break;
 		default:
 			break;
@@ -170,4 +192,39 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		return currState;
 	}
+
+
+	@Override
+	public void onResume(){
+		super.onResume();
+	}
+	@Override
+	public void onStop(){
+		super.onStop();
+		this.r1.stop();
+		this.p1.stop();
+		this.r2.stop();
+		this.p2.stop();
+		this.r3.stop();
+		this.p3.stop();
+		this.r4.stop();
+		this.p4.stop();
+		this.rec.stop();
+		this.lec.stop();
+	}
+	@Override
+	 public void onPause(){
+		super.onPause();
+		this.r1.stop();
+		this.p1.stop();
+		this.r2.stop();
+		this.p2.stop();
+		this.r3.stop();
+		this.p3.stop();
+		this.r4.stop();
+		this.p4.stop();
+		this.rec.stop();
+		this.lec.stop();
+	}
+
 }

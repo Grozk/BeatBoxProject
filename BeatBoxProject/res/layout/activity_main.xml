@@ -59,25 +59,12 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonRec"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="3" />
+            android:text="Record your sound" />
 
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="4" />
-        
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="4" />
     </LinearLayout>
 
 </LinearLayout>

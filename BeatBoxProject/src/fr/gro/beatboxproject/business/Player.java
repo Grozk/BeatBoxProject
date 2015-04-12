@@ -59,10 +59,14 @@ public class Player {
 	}
 
 	private void stopPlay() {
-		playerThread.interrupt();
-		playerThread = null;
-		mPlayer.stop();
-		mPlayer.reset();
+		if (playerThread != null){
+			playerThread.interrupt();
+			playerThread = null;
+		}
+		if (mPlayer != null) {
+			mPlayer.stop();
+			mPlayer.reset();
+		}
 		isStarted = false;
 	}
 
