@@ -13,168 +13,168 @@ import android.os.Environment;
 
 public class Recorder {
 
-	private static final String AUDIO_RECORDER_FILE_EXT_3GP = ".3gp";
-	private static final String AUDIO_RECORDER_FILE_EXT_MP4 = ".mp4";
-	private static final String AUDIO_RECORDER_FOLDER = "BeatBoxProject";
-	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy_HHmmss");
+    private static final String AUDIO_RECORDER_FILE_EXT_3GP = ".3gp";
+    private static final String AUDIO_RECORDER_FILE_EXT_MP4 = ".mp4";
+    private static final String AUDIO_RECORDER_FOLDER = "BeatBoxProject";
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy_HHmmss");
 
-	private int currentFormat = 0;
-	private int output_formats[] = { MediaRecorder.OutputFormat.MPEG_4,
-			MediaRecorder.OutputFormat.THREE_GPP };
-	private String file_exts[] = { AUDIO_RECORDER_FILE_EXT_MP4,
-			AUDIO_RECORDER_FILE_EXT_3GP };
+    private int currentFormat = 0;
+    private int output_formats[] = {MediaRecorder.OutputFormat.MPEG_4,
+            MediaRecorder.OutputFormat.THREE_GPP};
+    private String file_exts[] = {AUDIO_RECORDER_FILE_EXT_MP4,
+            AUDIO_RECORDER_FILE_EXT_3GP};
 
-	private MediaRecorder mRecorder = null;
-	private String idButton = null;
-	private String filename = null;
+    private MediaRecorder mRecorder = null;
+    private String idButton = null;
+    private String filename = null;
 
-	private boolean isRecording = false;
-	
-	public Recorder(MediaRecorder recorder, String idButton) {
-		super();
-		this.mRecorder = recorder;
-		this.idButton = idButton;
-		createFilename(null);
-	}
-	
-	private void startRecording() {
-		mRecorder = new MediaRecorder();
+    private boolean isRecording = false;
 
-		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-		mRecorder.setOutputFormat(output_formats[currentFormat]);
-		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-		mRecorder.setOutputFile(this.filename);
+    public Recorder(MediaRecorder recorder, String idButton) {
+        super();
+        this.mRecorder = recorder;
+        this.idButton = idButton;
+        createFilename(null);
+    }
 
-		// recorder.setOnErrorListener(errorListener);
-		// recorder.setOnInfoListener(infoListener);
+    private void startRecording() {
+        mRecorder = new MediaRecorder();
 
-		try {
-			mRecorder.prepare();
-			mRecorder.start();
-			this.isRecording = true;
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(output_formats[currentFormat]);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setOutputFile(this.filename);
 
-	private void stopRecording() {
-		if (null != mRecorder) {
-			mRecorder.stop();
-			mRecorder.reset();
-			mRecorder.release();
-			this.isRecording = false;
-			mRecorder = null;
-		}
-	}
+        // recorder.setOnErrorListener(errorListener);
+        // recorder.setOnInfoListener(infoListener);
 
-	private void resetRecord() {
-		File fic = new File(Environment.getExternalStorageDirectory()
-				+ File.separator + AUDIO_RECORDER_FOLDER + File.separator
-				+ idButton + file_exts[currentFormat]);
-		if (fic.exists()) {
-			fic.delete();
-		}
-	}
+        try {
+            mRecorder.prepare();
+            mRecorder.start();
+            this.isRecording = true;
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	private String createFilename(String date) {
+    private void stopRecording() {
+        if (null != mRecorder) {
+            mRecorder.stop();
+            mRecorder.reset();
+            mRecorder.release();
+            this.isRecording = false;
+            mRecorder = null;
+        }
+    }
 
-		File fParent = new File(Environment.getExternalStorageDirectory()
-				+ File.separator + AUDIO_RECORDER_FOLDER);
-		String nameFic = Environment.getExternalStorageDirectory()
-				+ File.separator + AUDIO_RECORDER_FOLDER + File.separator
-				+ idButton;
-		if (date != null && date!=""){
-			nameFic = nameFic.concat("_" + date);
-		}
-		nameFic = nameFic.concat(file_exts[currentFormat]);
-		File fic = new File(nameFic);
-		if (!fParent.exists()) {
-			fParent.mkdir();
-		}
+    private void resetRecord() {
+        File fic = new File(Environment.getExternalStorageDirectory()
+                + File.separator + AUDIO_RECORDER_FOLDER + File.separator
+                + idButton + file_exts[currentFormat]);
+        if (fic.exists()) {
+            fic.delete();
+        }
+    }
 
-		filename = fic.getAbsolutePath().toString();
+    private String createFilename(String date) {
 
-		return filename;
-	}
+        File fParent = new File(Environment.getExternalStorageDirectory()
+                + File.separator + AUDIO_RECORDER_FOLDER);
+        String nameFic = Environment.getExternalStorageDirectory()
+                + File.separator + AUDIO_RECORDER_FOLDER + File.separator
+                + idButton;
+        if (date != null && date != "") {
+            nameFic = nameFic.concat("_" + date);
+        }
+        nameFic = nameFic.concat(file_exts[currentFormat]);
+        File fic = new File(nameFic);
+        if (!fParent.exists()) {
+            fParent.mkdir();
+        }
 
-	public boolean copie(){
-		boolean result;
-		FileInputStream fis = null;
-		FileOutputStream fos = null;
-		try {
-			fis = new FileInputStream(filename);
-			Date currDate = new Date();
+        filename = fic.getAbsolutePath().toString();
 
-			fos = new FileOutputStream(createFilename(DATE_FORMAT.format(currDate)));
+        return filename;
+    }
 
-			byte buffer[]=new byte[512*1024];
-			int nbLecture;
-			while ((nbLecture = fis.read(buffer)) != -1){
-				fos.write(buffer,0,nbLecture);
-			}
-			result = true;
-		} catch(Exception e){
-			System.out.print(e);
-			result = false;
-		}finally {
-			try{
-				fis.close();
-				fos.close();
-			} catch(Exception e){
-				System.out.print(e);
-				result = false;
-			}
-		}
-		return result;
-	}
+    public boolean copie() {
+        boolean result;
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream(filename);
+            Date currDate = new Date();
 
-	public void start() {
-		startRecording();
-	}
+            fos = new FileOutputStream(createFilename(DATE_FORMAT.format(currDate)));
 
-	public void stop() {
-		stopRecording();
-	}
+            byte buffer[] = new byte[512 * 1024];
+            int nbLecture;
+            while ((nbLecture = fis.read(buffer)) != -1) {
+                fos.write(buffer, 0, nbLecture);
+            }
+            result = true;
+        } catch (Exception e) {
+            System.out.print(e);
+            result = false;
+        } finally {
+            try {
+                fis.close();
+                fos.close();
+            } catch (Exception e) {
+                System.out.print(e);
+                result = false;
+            }
+        }
+        return result;
+    }
 
-	public boolean isRecording(){
-		return isRecording;
-	}
+    public void start() {
+        startRecording();
+    }
 
-	public String getFilenameRecord() {
-		return this.filename;
-	}
+    public void stop() {
+        stopRecording();
+    }
 
-	public void reset() {
-		resetRecord();
-	}
-	// recorder = new MediaRecorder();
-	//
-	// recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-	// recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-	// recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-	// recorder.setOutputFile("/sdcard/sample.3gp");
-	//
-	// recorder.setOnErrorListener(errorListener);
-	// recorder.setOnInfoListener(infoListener);
-	//
-	//
-	// try
-	// {
-	// recorder.prepare();
-	// recorder.start();
-	// } catch (IllegalStateException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	//
-	//
-	// recorder.stop();
-	// recorder.reset();
-	// recorder.release();
-	//
-	// recorder = null;
-	
+    public boolean isRecording() {
+        return isRecording;
+    }
+
+    public String getFilenameRecord() {
+        return this.filename;
+    }
+
+    public void reset() {
+        resetRecord();
+    }
+    // recorder = new MediaRecorder();
+    //
+    // recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+    // recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+    // recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+    // recorder.setOutputFile("/sdcard/sample.3gp");
+    //
+    // recorder.setOnErrorListener(errorListener);
+    // recorder.setOnInfoListener(infoListener);
+    //
+    //
+    // try
+    // {
+    // recorder.prepare();
+    // recorder.start();
+    // } catch (IllegalStateException e) {
+    // e.printStackTrace();
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // }
+    //
+    //
+    // recorder.stop();
+    // recorder.reset();
+    // recorder.release();
+    //
+    // recorder = null;
+
 }
