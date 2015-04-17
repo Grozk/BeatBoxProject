@@ -17,5 +17,7 @@
     <string name="questionSave">Would you like to save your sound ?</string>
     <string name="oui">Yes</string>
     <string name="non">No</string>
+    <string name="menu_action_credit">About</string>
+    <string name="menu_action_credit_text">For any suggestions or bug detection, please inform the developer at the following email : grzk.dev@gmail.com</string>
 
 </resources>
