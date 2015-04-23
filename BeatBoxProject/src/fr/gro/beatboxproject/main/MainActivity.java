@@ -15,14 +15,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.beatboxproject.R;
+import fr.grzk.beatboxproject.R;
 
 import fr.gro.beatboxproject.business.Player;
 import fr.gro.beatboxproject.business.Recorder;
 import fr.gro.beatboxproject.objects.StateEnum;
 
 import static android.graphics.Color.RED;
-import static android.graphics.Color.WHITE;
 
 public class MainActivity extends Activity implements OnClickListener,
         OnLongClickListener {
@@ -300,7 +299,7 @@ public class MainActivity extends Activity implements OnClickListener,
     /**
      * Change button textColor to RED
      *
-     * @param button
+     * @param button :
      */
     private void changeStyleToButtonUsed(Button button) {
         button.setTextColor(RED);
@@ -309,7 +308,7 @@ public class MainActivity extends Activity implements OnClickListener,
     /**
      * Change button textColor to WHITE
      *
-     * @param button
+     * @param button :
      */
     private void changeStyleToButtonNotUsed(Button button) {
         button.setTextColor(Color.BLACK);
